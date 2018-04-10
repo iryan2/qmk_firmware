@@ -1,3 +1,8 @@
+/*
+ * Todo: enter on right shift
+ * modifiers for RAISE
+ */
+
 #include "lets_split.h"
 #include "action_layer.h"
 #include "eeconfig.h"
