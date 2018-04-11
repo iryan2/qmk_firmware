@@ -1,8 +1,3 @@
-/*
- * Todo: enter on right shift
- * modifiers for RAISE
- */
-
 #include "lets_split.h"
 #include "action_layer.h"
 #include "eeconfig.h"
@@ -55,15 +50,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+-------------+------+------+------+------+------|
  * | Ctrl |  F1  |  F2  |  F3  |  F4  |  F5  |  =   |   _  |  Up  |   [  |   ]  |  |   |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
- * | Del  |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 | Left | Down |Right |      |      |
+ * | Del  |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 | Left | Down |Right |      |Enter |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |      |  Alt |  Cmd |      |             |      |      |      |      |      |
  * `-----------------------------------------------------------------------------------'
  */
 [_LOWER] = LAYOUT( \
   KC_TILD,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_DEL, \
-  KC_LCTRL,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_UNDS, KC_UP, KC_LBRC, KC_RBRC, KC_PIPE, \
-  KC_DEL, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12, KC_LEFT, KC_DOWN, KC_RGHT, _______, _______, \
+  KC_LCTRL,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_EQL,   KC_UNDS, KC_UP, KC_LBRC, KC_RBRC, KC_PIPE, \
+  KC_LSFT, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12, KC_LEFT, KC_DOWN, KC_RGHT, _______, KC_ENT, \
   _______, _______, KC_LALT, KC_LGUI, _______, _______, _______, _______, _______, _______, _______, _______ \
 ),
 
@@ -71,18 +66,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-----------------------------------------------------------------------------------.
  * |   `  |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  | Del  |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
- * |      |  (   |  {   |  }   |  )   |  -   |  F6  |   -  |  Up  |   {  |   }  |  \   |
+ * | Ctrl |  (   |  {   |  }   |  )   |  -   |  F6  |   -  |  Up  |   {  |   }  |  \   |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
- * | Del  |  $   |  %   |  ^   |  &   |  *   |  F12 | Left | Down |Right |      |      |
+ * |Shift |  $   |  %   |  ^   |  &   |  *   |  F12 | Left | Down |Right |      |Enter |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |      |      |      |             |      | Cmd  | Alt  | Ctrl |Enter |
+ * |      |      |  Alt |  Cmd |      |             |      | Cmd  | Alt  | Ctrl |Enter |
  * `-----------------------------------------------------------------------------------'
  */
 [_RAISE] = LAYOUT( \
   KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_DEL, \
-  _______,  KC_LPRN,   KC_LCBR,   KC_RCBR,   KC_RPRN,   KC_MINS,   KC_F6,   KC_MINS, KC_UP,  KC_LCBR, KC_RCBR, KC_BSLS, \
-  KC_DEL, KC_DLR,   KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR,  KC_F12,  KC_LEFT, KC_DOWN, KC_RGHT, _______, _______, \
-  _______, _______, _______, _______, _______, _______, _______, _______, KC_RGUI, KC_RALT, KC_RCTRL,   KC_ENT \
+  KC_LCTRL,  KC_LPRN,   KC_LCBR,   KC_RCBR,   KC_RPRN,   KC_MINS,   KC_F6,   KC_MINS, KC_UP,  KC_LCBR, KC_RCBR, KC_BSLS, \
+  KC_LSFT, KC_DLR,   KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR,  KC_F12,  KC_LEFT, KC_DOWN, KC_RGHT, _______, KC_ENT, \
+  _______, _______, KC_LALT, KC_LGUI, _______, _______, _______, _______, KC_RGUI, KC_RALT, KC_RCTRL,   KC_ENT \
 ),
 
 /* Adjust (Lower + Raise)
