@@ -21,16 +21,18 @@ enum custom_keycodes {
   DEV_ON,
   DEV_OFF,
   ADJUST,
-  VI_LAST,
   CPY_PST,
-  SCRATCH,
 };
 
 // Fillers to make layering more clear
 #define _______ KC_TRNS
 #define XXXXXXX KC_NO
+#define CTL_ESC CTL_T(KC_ESC)
 #define CMD_LSB LGUI(KC_LBRACKET)
 #define CMD_RSB RGUI(KC_RBRACKET)
+
+#undef LEADER_TIMEOUT
+#define LEADER_TIMEOUT 300
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -42,14 +44,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |Shift |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |Enter |Adjust|  Alt |  Cmd |Lower |Space |Space |Raise | Cmd  | Alt  | Ctrl |Enter |
+ * |Enter |Leader|  Alt |  Cmd |Lower |Space |Space |Raise | Cmd  | Alt  | Ctrl |Enter |
  * `-----------------------------------------------------------------------------------'
  */
 [_QWERTY] = LAYOUT( \
-  KC_TAB,        KC_Q,   KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,     KC_BSPC, \
-  CTL_T(KC_ESC), KC_A,   KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN,  KC_QUOT, \
-  KC_LSFT,       KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,  KC_RSFT , \
-  KC_ENT,        ADJUST, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  KC_SPC,  RAISE,   KC_RGUI, KC_RALT, KC_RCTRL, KC_ENT \
+  KC_TAB,  KC_Q,   KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,     KC_BSPC, \
+  CTL_ESC, KC_A,   KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN,  KC_QUOT, \
+  KC_LSFT, KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,  KC_RSFT , \
+  KC_ENT,  KC_LEAD, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  KC_SPC,  RAISE,   KC_RGUI, KC_RALT, KC_RCTRL, KC_ENT \
 ),
 
 /* Lower
@@ -90,7 +92,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Dev
  * ,-----------------------------------------------------------------------------------.
- * |      |iTerm |viLast|cpypst|scrtch|      |iTerm |viLast|      | ntpd |      |      |
+ * |      |iTerm |      |cpypst|      |      |iTerm |viLast|      | ntpd |      |      |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
  * |      | Redo | El   | cnsl |      |      | Redo | El   | cnsl |      |      |      |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
@@ -98,11 +100,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * | Leave|      |      |      |      |             |      |      |      |      | Leave|
  * `-----------------------------------------------------------------------------------'
- * viLast assumes ag was last command, opens matching files in vim:
- * vim $(!! -l)
  */
 [_DEV] = LAYOUT( \
-  _______, _______,  VI_LAST, CPY_PST, SCRATCH, _______, _______, _______, _______, _______, _______, _______, \
+  _______, _______,  _______, CPY_PST, _______, _______, _______, _______, _______, _______, _______, _______, \
   _______, _______,  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
   _______, _______,  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
   DEV_OFF, _______,  _______, _______, _______, _______, _______, _______, _______, _______, _______, DEV_OFF \
@@ -189,12 +189,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
       break;
-    case VI_LAST:
-      if (record->event.pressed) {
-        SEND_STRING("vim $(!! -l)");
-      }
-      return false;
-      break;
     case CPY_PST:
       if (record->event.pressed) {
         SEND_STRING(SS_LGUI("c"));
@@ -203,12 +197,24 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
       break;
-    case SCRATCH:
-      if (record->event.pressed) {
-        SEND_STRING(SS_LGUI(" ")"textedit"SS_TAP(X_ENTER));
-      }
-      return false;
-      break;
   }
   return true;
+}
+
+LEADER_EXTERNS();
+
+void matrix_scan_user(void) {
+  LEADER_DICTIONARY() {
+    leading = false;
+    leader_end();
+
+    SEQ_ONE_KEY(KC_E) {
+      // Open blank text editor (TextEdit.app via spotlight)
+      SEND_STRING(SS_LGUI(" ")"textedit"SS_TAP(X_ENTER));
+    }
+    SEQ_ONE_KEY(KC_V) {
+      // Open last ag results in vim
+      SEND_STRING("vim $(!! -l)"SS_TAP(X_ENTER)SS_TAP(X_ENTER));
+    }
+  }
 }
