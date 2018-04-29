@@ -18,9 +18,12 @@ enum custom_keycodes {
   QWERTY = SAFE_RANGE,
   LOWER,
   RAISE,
-  DEV,
+  DEV_ON,
+  DEV_OFF,
   ADJUST,
   VI_LAST,
+  CPY_PST,
+  SCRATCH,
 };
 
 // Fillers to make layering more clear
@@ -63,7 +66,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_LOWER] = LAYOUT( \
   KC_TILD,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_DEL, \
   KC_LCTRL, CMD_LSB, CMD_RSB, KC_UP,   _______, _______, KC_EQL,  KC_MINS, _______, KC_LBRC, KC_RBRC, KC_PIPE, \
-  KC_LSFT,  _______, KC_LEFT, KC_DOWN, KC_RGHT, _______, _______, _______, _______, _______, _______, KC_ENT, \
+  KC_LSFT,  DEV_ON,     KC_LEFT, KC_DOWN, KC_RGHT, _______, _______, _______, _______, _______, _______, KC_ENT, \
   _______,  _______, KC_LALT, KC_LGUI, _______, _______, _______, _______, _______, _______, _______, _______ \
 ),
 
@@ -81,13 +84,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_RAISE] = LAYOUT( \
   KC_GRV,  KC_1,     KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_DEL, \
   KC_LCTRL, KC_LPRN, KC_LCBR, KC_RCBR, KC_RPRN, KC_MINS, KC_UNDS, KC_UNDS, KC_UP,   KC_LCBR, KC_RCBR, KC_BSLS, \
-  KC_LSFT, _______,  _______, _______, _______, _______, _______, KC_LEFT, KC_DOWN, KC_RGHT, _______, KC_RSFT, \
+  KC_LSFT, _______,  _______, _______, _______, _______, _______, KC_LEFT, KC_DOWN, KC_RGHT, DEV_ON,  KC_RSFT, \
   _______, _______,  KC_LALT, KC_LGUI, _______, _______, _______, _______, KC_RGUI, KC_RALT, KC_RCTRL,KC_ENT \
 ),
 
 /* Dev
  * ,-----------------------------------------------------------------------------------.
- * |      |iTerm |viLast|      | ntpd |      |iTerm |viLast|      | ntpd |      |      |
+ * |      |iTerm |viLast|cpypst|scrtch|      |iTerm |viLast|      | ntpd |      |      |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
  * |      | Redo | El   | cnsl |      |      | Redo | El   | cnsl |      |      |      |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
@@ -99,10 +102,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * vim $(!! -l)
  */
 [_DEV] = LAYOUT( \
-  _______, _______,  VI_LAST, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
+  _______, _______,  VI_LAST, CPY_PST, SCRATCH, _______, _______, _______, _______, _______, _______, _______, \
   _______, _______,  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
   _______, _______,  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
-  _______, _______,  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______ \
+  DEV_OFF, _______,  _______, _______, _______, _______, _______, _______, _______, _______, _______, DEV_OFF \
 ),
 
 /* Adjust (Lower + Raise)
@@ -174,9 +177,35 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
       break;
+    case DEV_ON:
+      if (record->event.pressed) {
+        layer_on(_DEV);
+      }
+      return false;
+      break;
+    case DEV_OFF:
+      if (record->event.pressed) {
+        layer_off(_DEV);
+      }
+      return false;
+      break;
     case VI_LAST:
       if (record->event.pressed) {
         SEND_STRING("vim $(!! -l)");
+      }
+      return false;
+      break;
+    case CPY_PST:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LGUI("c"));
+      } else {
+        SEND_STRING(SS_LGUI("v"));
+      }
+      return false;
+      break;
+    case SCRATCH:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LGUI(" ")"textedit"SS_TAP(X_ENTER));
       }
       return false;
       break;
