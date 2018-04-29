@@ -22,6 +22,7 @@ enum custom_keycodes {
   DEV_OFF,
   ADJUST,
   CPY_PST,
+  MOUSE1,
 };
 
 // Fillers to make layering more clear
@@ -58,7 +59,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-----------------------------------------------------------------------------------.
  * |  ~   |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  | Del  |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
- * | Ctrl |cmd+[ |cmd+] |  Up  |      |      |  =   |   -  |      |   [  |   ]  |  |   |
+ * | Ctrl |cmd+[ |cmd+] |  Up  |Mouse1|      |  =   |   -  |      |   [  |   ]  |  |   |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * |Shift | Dev  | Left | Down |Right |      |      |      |      |      |      |Enter |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
@@ -67,7 +68,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_LOWER] = LAYOUT( \
   KC_TILD,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_DEL, \
-  KC_LCTRL, CMD_LSB, CMD_RSB, KC_UP,   _______, _______, KC_EQL,  KC_MINS, _______, KC_LBRC, KC_RBRC, KC_PIPE, \
+  KC_LCTRL, CMD_LSB, CMD_RSB, KC_UP,   MOUSE1, _______, KC_EQL,  KC_MINS, _______, KC_LBRC, KC_RBRC, KC_PIPE, \
   KC_LSFT,  DEV_ON,     KC_LEFT, KC_DOWN, KC_RGHT, _______, _______, _______, _______, _______, _______, KC_ENT, \
   _______,  _______, KC_LALT, KC_LGUI, _______, _______, _______, _______, _______, _______, _______, _______ \
 ),
@@ -194,6 +195,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         SEND_STRING(SS_LGUI("c"));
       } else {
         SEND_STRING(SS_LGUI("v"));
+      }
+      return false;
+      break;
+    case MOUSE1:
+      report_mouse_t currentReport = pointing_device_get_report();
+      if (record->event.pressed) {
+        currentReport.buttons |= MOUSE_BTN1; //this is defined in report.h
+      } else {
+        currentReport.buttons &= ~MOUSE_BTN1;
       }
       return false;
       break;
