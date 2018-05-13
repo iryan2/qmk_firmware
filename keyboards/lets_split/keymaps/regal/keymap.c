@@ -179,7 +179,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       break;
     case DEV_ON:
       if (record->event.pressed) {
-        layer_on(_DEV);
+        /* layer_on(_DEV); */
       }
       return false;
       break;
