@@ -76,7 +76,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-----------------------------------------------------------------------------------.
  * |   `  |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  | Del  |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
- * | Ctrl |  (   |  {   |  }   |  )   |  -   |   +  |   _  |  Up  |   {  |   }  |  \   |
+ * | Ctrl |      |  (   |  {   |  }   |  )   |   +  |   _  |  Up  |   {  |   }  |  \   |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * |Shift |      |      |      |      |      |      | Left | Down |Right | Dev  |Shift |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
@@ -85,7 +85,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_RAISE] = LAYOUT( \
   KC_GRV,  KC_1,     KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_DEL, \
-  KC_LCTRL, KC_LPRN, KC_LCBR, KC_RCBR, KC_RPRN, KC_MINS, KC_UNDS, KC_UNDS, KC_UP,   KC_LCBR, KC_RCBR, KC_BSLS, \
+  KC_LCTRL, _______, KC_LPRN, KC_LCBR, KC_RCBR, KC_RPRN, KC_UNDS, KC_UNDS, KC_UP,   KC_LCBR, KC_RCBR, KC_BSLS, \
   KC_LSFT, _______,  _______, _______, _______, _______, _______, KC_LEFT, KC_DOWN, KC_RGHT, DEV_ON,  KC_RSFT, \
   _______, _______,  KC_LALT, KC_LGUI, _______, _______, _______, _______, KC_RGUI, KC_RALT, KC_RCTRL,KC_ENT \
 ),
