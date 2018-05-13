@@ -92,8 +92,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Dev
  * ,-----------------------------------------------------------------------------------.
- * |      |iTerm |      |cpypst|      |      |iTerm |viLast|      | ntpd |      |      |
- * |------+------+------+------+------+-------------+------+------+------+------+------|
+ * |      |      |      |cpypst|      |      |emcscp|viLast|      | ntpd |      |      | // emcsp = alt+| pbcopy<RET>
+ * |------+------+------+------+------+-------------+------+------+------+------+------| // viLast = vim $(!! -l)
  * |      | Redo | El   | cnsl |      |      | Redo | El   | cnsl |      |      |      |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * |      | Undo | Cut  | Copy |Paste |      | Undo | Cut  | Copy |Paste |      |      |
@@ -179,7 +179,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       break;
     case DEV_ON:
       if (record->event.pressed) {
-        /* layer_on(_DEV); */
+        layer_on(_DEV);
       }
       return false;
       break;
