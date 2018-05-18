@@ -92,7 +92,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Dev
  * ,-----------------------------------------------------------------------------------.
- * |      |      |      |cpypst|      |      |emcscp|viLast|      | ntpd |      |      | // emcsp = alt+| pbcopy<RET>
+ * |      |      |      |cpypst|      |      |emcscp|viLast|scrnsht|ntpd |      |      | // emcsp = alt+| pbcopy<RET>
  * |------+------+------+------+------+-------------+------+------+------+------+------| // viLast = vim $(!! -l)
  * |      | Redo | El   | cnsl |      |      | Redo | El   | cnsl |      |      |      |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
