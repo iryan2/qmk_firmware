@@ -216,5 +216,10 @@ void matrix_scan_user(void) {
       // Open last ag results in vim
       SEND_STRING("vim $(!! -l)"SS_TAP(X_ENTER)SS_TAP(X_ENTER));
     }
+    SEQ_ONE_KEY(KC_C) {
+      // Copy visual selection in emacs to system clipboard
+      // Right alt + |, 'pbcopy', enter
+      SEND_STRING(SS_RALT("|")"pbcopy"SS_TAP(X_ENTER));
+    }
   }
 }
